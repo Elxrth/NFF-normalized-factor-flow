@@ -421,5 +421,5 @@ Its usefulness depends on the mathematical properties measured by the NUA layer 
 ---
 
 <p align="center">
-  <sub>NFF — Normalized Factor Flow · Documentation</sub>
+  <sub>NFF — Normalized Factor Flow Documentation drafted with assistance from ChatGPT · Documentation</sub>
 </p>
