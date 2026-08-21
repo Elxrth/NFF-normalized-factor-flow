@@ -191,12 +191,11 @@ NFF Signatures can be compared to determine whether different Flows exhibit simi
 A simple Euclidean distance between two Signatures can be expressed as:
 
 $$
-d(S_a,S_b)
-==========
-
+d(S_a, S_b)
+=
 \sqrt{
 \sum_i
-(S_{a,i}-S_{b,i})^2
+(S_{a,i} - S_{b,i})^2
 }
 $$
 
