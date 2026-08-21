@@ -1,54 +1,64 @@
 $ErrorActionPreference = "Stop"
 
-$Repo = "https://github.com/Elxrth/NFF-normalized-factor-flow.git"
+$Repo = "https://github.com/Elxrth/NFF-normalized-factor-flow/archive/refs/heads/main.zip"
 $InstallPath = "$env:USERPROFILE\NFF"
 
 Write-Host "Installing NFF..."
 
 # Check Python
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Host "Python is required but was not found."
-    Write-Host "Install Python 3.10+ and run the installer again."
+    Write-Host "Python was not found."
+    Write-Host "Please install Python 3.10 or newer."
     exit 1
 }
 
-# Check Git
-if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-    Write-Host "Git is required but was not found."
-    Write-Host "Install Git and run the installer again."
-    exit 1
+# Download repository
+$TempZip = "$env:TEMP\nff.zip"
+$TempDir = "$env:TEMP\nff-install"
+
+if (Test-Path $TempDir) {
+    Remove-Item $TempDir -Recurse -Force
 }
 
-# Clone repository
+Write-Host "Downloading NFF..."
+Invoke-WebRequest -Uri $Repo -OutFile $TempZip
+
+# Extract
+Write-Host "Extracting files..."
+Expand-Archive -Path $TempZip -DestinationPath $TempDir -Force
+
+$SourcePath = Join-Path $TempDir "NFF-normalized-factor-flow-main"
+
+# Install directory
 if (-not (Test-Path $InstallPath)) {
-    git clone $Repo $InstallPath
+    New-Item -ItemType Directory -Path $InstallPath | Out-Null
 }
-else {
-    Write-Host "NFF already exists at $InstallPath"
-}
+
+Copy-Item "$SourcePath\*" $InstallPath -Recurse -Force
 
 Set-Location $InstallPath
 
 # Create virtual environment
 if (-not (Test-Path ".venv")) {
-    Write-Host "Creating virtual environment..."
+    Write-Host "Creating Python virtual environment..."
     python -m venv .venv
 }
 
-# Activate virtual environment
-& ".\.venv\Scripts\Activate.ps1"
+$Python = ".\.venv\Scripts\python.exe"
 
-# Update pip
-python -m pip install --upgrade pip
+# Upgrade pip
+Write-Host "Updating pip..."
+& $Python -m pip install --upgrade pip
 
 # Install PyTorch
 Write-Host "Installing PyTorch..."
-python -m pip install torch
+& $Python -m pip install torch
 
 Write-Host ""
 Write-Host "NFF installed successfully."
 Write-Host "Location: $InstallPath"
 Write-Host ""
-Write-Host "Starting NFF..."
 
-python main.py
+# Run NFF
+Write-Host "Starting NFF..."
+& $Python main.py
