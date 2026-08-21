@@ -192,16 +192,25 @@ A simple Euclidean distance between two Signatures can be expressed as:
 
 $$
 d(S_a, S_b)
-=
+===========
+
 \sqrt{
 \sum_i
-(S_{a,i} - S_{b,i})^2
+\left(S_{a,i} - S_{b,i}\right)^2
 }
 $$
 
+Where:
+
+* $S_a$ is the first NFF Signature.
+* $S_b$ is the second NFF Signature.
+* $S_{a,i}$ is the $i$-th component of $S_a$.
+* $S_{b,i}$ is the $i$-th component of $S_b$.
+
 A smaller distance indicates greater similarity according to the selected NUA measurements.
 
-Other distance or similarity metrics can also be used depending on the structure of the Signature.
+Other distance or similarity metrics can also be used depending on the structure and dimensionality of the NFF Signature.
+
 
 ---
 
